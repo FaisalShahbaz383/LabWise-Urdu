@@ -101,7 +101,3 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 ## 🛡️ Medical Safety Disclaimer
 
 Educational Tool Only: LabWise Urdu is an automated literacy assistant designed solely to clarify medical terminology and reference ranges. It does NOT provide medical advice, diagnosis, or treatment plans. Always consult a licensed healthcare professional or certified physician regarding medical test results.
-
-## 📄 License
-
-Distributed under the MIT License. See LICENSE for more information.
