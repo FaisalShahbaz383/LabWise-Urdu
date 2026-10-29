@@ -48,7 +48,7 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 
 ### Clone the Repository:
 
-1. git clone https://github.com/YourUsername/LabWise-Urdu.git
+1. git clone https://github.com/FaisalShahbaz383/LabWise-Urdu.git
 2. cd LabWise-Urdu
 
 
