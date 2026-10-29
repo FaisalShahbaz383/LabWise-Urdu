@@ -38,54 +38,54 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 
 ## Prerequisites
 
-Node.js (v18 or higher)
+1. Node.js (v18 or higher)
 
-MongoDB running locally or a MongoDB Atlas cluster URL
+2. MongoDB running locally or a MongoDB Atlas cluster URL
 
-Google AI Studio API Key
+3. Google AI Studio API Key
 
 ## 📥 Installation & Setup
 
 ### Clone the Repository:
 
-git clone https://github.com/YourUsername/LabWise-Urdu.git
-cd LabWise-Urdu
+1. git clone https://github.com/YourUsername/LabWise-Urdu.git
+2. cd LabWise-Urdu
 
 
 ### Configure Backend:
 
-cd backend
-npm install
+1. cd backend
+2. npm install
 
 
 ### Create a .env file inside backend/:
 
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/medical_reports
-JWT_SECRET=your_super_secret_jwt_key
-JWT_EXPIRE=30d
-GEMINI_API_KEY=your_google_gemini_api_key
+1. PORT=5000
+2. MONGO_URI=mongodb://localhost:27017/medical_reports
+3. JWT_SECRET=your_super_secret_jwt_key
+4. JWT_EXPIRE=30d
+5. GEMINI_API_KEY=your_google_gemini_api_key
 
 
 ### Configure Frontend:
 
-cd ../frontend
-npm install
+1. cd ../frontend
+2. npm install
 
 
 ### 💻 Running Locally
 
-Start the Backend Server:
+### Start the Backend Server:
 
-cd backend
-npm start
+1. cd backend
+2. npm start
 # or for development: npm run dev
 
 
 ### Start the Frontend Application:
 
-cd frontend
-npm start
+1. cd frontend
+2. npm start
 
 
 ### Open your browser and navigate to http://localhost:3000.
