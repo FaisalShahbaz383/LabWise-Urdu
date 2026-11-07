@@ -88,7 +88,7 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 
 1. cd backend
 2. npm start
-# or for development: npm run dev
+### or for development: npm run dev
 
 
 ### Start the Frontend Application:
