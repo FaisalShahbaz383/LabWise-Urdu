@@ -60,12 +60,14 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 1. git clone https://github.com/FaisalShahbaz383/LabWise-Urdu.git
 2. cd LabWise-Urdu
 
+---
 
 ### Configure Backend:
 
 1. cd backend
 2. npm install
 
+---
 
 ### Create a .env file inside backend/:
 
@@ -75,12 +77,14 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 4. JWT_EXPIRE=30d
 5. GEMINI_API_KEY=your_google_gemini_api_key
 
+---
 
 ### Configure Frontend:
 
 1. cd ../frontend
 2. npm install
 
+---
 
 ### 💻 Running Locally
 
@@ -90,11 +94,14 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 2. npm start
 ### or for development: npm run dev
 
+---
 
 ### Start the Frontend Application:
 
 1. cd frontend
 2. npm start
+
+---
 
 ### 🧪 Automated Testing Suite
 
@@ -104,6 +111,8 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 2. npm test
 
 Executes unit tests for OCR string parsing (ocrService.test.js), Gemini AI structuring mocks (aiService.test.js), and API route responses (reportRoutes.test.js).
+
+---
 
 ### Open your browser and navigate to http://localhost:3000.
 
