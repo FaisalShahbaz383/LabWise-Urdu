@@ -70,7 +70,11 @@ const Navbar = ({ activeTab, onTabChange }) => {
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span>My Reports History</span>
+            <span>
+              {user && user.role === 'admin'
+                ? 'All Reports History'
+                : 'My Reports History'}
+            </span>
           </button>
 
           {/* Admin Panel Tab - Rendered only for administrators */}
