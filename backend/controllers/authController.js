@@ -57,6 +57,7 @@ const registerUser = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt,
       },
     });
@@ -114,6 +115,7 @@ const loginUser = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt,
       },
     });
@@ -144,6 +146,7 @@ const getMe = async (req, res, next) => {
         id: req.user._id,
         name: req.user.name,
         email: req.user.email,
+        role: req.user.role,
         createdAt: req.user.createdAt,
       },
     });
@@ -153,9 +156,79 @@ const getMe = async (req, res, next) => {
   }
 };
 
+/**
+ * @route   GET /api/auth/users
+ * @desc    Get all registered users (Admin only)
+ * @access  Private (Admin)
+ */
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find()
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    console.error('Fetch all users error:', error);
+    next(error);
+  }
+};
+
+/**
+ * @route   PUT /api/auth/users/:id/role
+ * @desc    Update a user's role (Admin only)
+ * @access  Private (Admin)
+ */
+const updateUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!role || !['user', 'admin'].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid role provided. Role must be "user" or "admin".',
+      });
+    }
+
+    const user = await User.findById(id).select('-password');
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      });
+    }
+
+    user.role = role;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `User role updated to ${role} successfully.`,
+      user: {
+        _id: user._id,
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error('Update user role error:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getAllUsers,
+  updateUserRole,
   generateToken,
 };

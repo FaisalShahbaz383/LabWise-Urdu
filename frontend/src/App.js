@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import FileUpload from './components/FileUpload';
 import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
 import ReportHistory from './components/ReportHistory';
-import { AuthProvider } from './context/AuthContext';
+import AdminDashboard from './components/AdminDashboard';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState('analyze'); // 'analyze' | 'history'
+  const [activeTab, setActiveTab] = useState('analyze'); // 'analyze' | 'history' | 'admin'
+  const { isAdmin } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
   const [latestReport, setLatestReport] = useState(null);
+
+  // Guard admin view: if logged out or non-admin, redirect back to analyze
+  useEffect(() => {
+    if (activeTab === 'admin' && !isAdmin) {
+      setActiveTab('analyze');
+    }
+  }, [activeTab, isAdmin]);
 
   const handleUploadSuccess = (data) => {
     setLatestReport(data);
@@ -80,7 +89,7 @@ function AppContent() {
                 <div className="card-title-group">
                   <h2 className="card-title">Upload &amp; Analyze Lab Report</h2>
                   <p className="card-subtitle">
-                    Select or drag a diagnostic document to trigger OCR extraction and Gemini bilingual structuring.
+                    Upload or drag a diagnostic document to extract clinical markers and receive simplified bilingual summaries in English and Urdu.
                   </p>
                 </div>
                 <div className="pipeline-pill">AI Engine: Active</div>
@@ -142,6 +151,10 @@ function AppContent() {
             </div>
           </main>
         </>
+      ) : activeTab === 'admin' ? (
+        <main className="app-main">
+          <AdminDashboard onNavigateToUpload={() => setActiveTab('analyze')} />
+        </main>
       ) : (
         <main className="app-main">
           <ReportHistory onNavigateToUpload={() => setActiveTab('analyze')} />
@@ -154,7 +167,7 @@ function AppContent() {
       {/* App Footer */}
       <footer className="app-footer">
         <p>
-          LabWise Urdu • AI Medical Report Explainer • Built with React, Express, pdf2json, Gemini &amp; MongoDB
+          LabWise Urdu • AI Medical Report Explainer • Built with React, Node.js, Express, Gemini AI &amp; MongoDB
         </p>
         <p className="footer-subtext">
           Designed for educational health literacy. Confidential documents are processed locally and securely.

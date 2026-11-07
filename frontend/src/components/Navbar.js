@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = ({ activeTab, onTabChange }) => {
-  const { user, isAuthenticated, logout, openAuthModal } = useAuth();
+  const { user, isAuthenticated, logout, openAuthModal, isAdmin } = useAuth();
 
   return (
     <nav className="app-navbar">
@@ -72,16 +72,49 @@ const Navbar = ({ activeTab, onTabChange }) => {
             </svg>
             <span>My Reports History</span>
           </button>
+
+          {/* Admin Panel Tab - Rendered only for administrators */}
+          {Boolean(isAdmin || user?.role === 'admin') && (
+            <button
+              type="button"
+              className={`nav-link-btn nav-link-admin ${activeTab === 'admin' ? 'nav-link-active' : ''}`}
+              onClick={() => onTabChange('admin')}
+              title="Admin User Management"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>Admin Panel</span>
+            </button>
+          )}
         </div>
 
         {/* User Auth Actions */}
         <div className="navbar-auth-actions">
           {isAuthenticated ? (
             <div className="user-profile-badge">
-              <div className="user-avatar-circle">
+              <div
+                className={`user-avatar-circle ${
+                  Boolean(isAdmin || user?.role === 'admin') ? 'user-avatar-admin' : ''
+                }`}
+              >
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span className="user-display-name">{user?.name}</span>
+              <div className="user-info-text-group">
+                <span className="user-display-name">{user?.name}</span>
+                {Boolean(isAdmin || user?.role === 'admin') && (
+                  <span className="navbar-admin-tag">Admin</span>
+                )}
+              </div>
               <button
                 type="button"
                 className="btn-logout"
