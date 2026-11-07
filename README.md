@@ -38,7 +38,7 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 ### 4. AI & OCR: Google Gemini 1.5/2.0 Flash API, pdf2json, tesseract.js.
 
 ### 5. Testing Suite: Jest, Supertest, jest-environment-node.
-
+```text
 ---
 
 ## 🚀 Getting Started
