@@ -27,6 +27,7 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
                                   +---> [ pdf2json / Tesseract.js ] (OCR Pipeline)
                                   +---> [ MongoDB Atlas DB ]       (Users & Reports)
 
+---
 
 ### 1. Frontend: React.js (v18+), Context API (AuthContext), React Router, CSS3 with native RTL Typography Support.
 
@@ -38,6 +39,8 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 
 ### 5. Testing Suite: Jest, Supertest, jest-environment-node.
 
+---
+
 ## 🚀 Getting Started
 
 ## Prerequisites
@@ -47,6 +50,8 @@ LabWise Urdu is an open-source, full-stack medical report analyzer designed to i
 2. MongoDB running locally or a MongoDB Atlas cluster URL
 
 3. Google AI Studio API Key
+
+---
 
 ## 📥 Installation & Setup
 
@@ -110,9 +115,13 @@ Executes unit tests for OCR string parsing (ocrService.test.js), Gemini AI struc
 
 ### 3. Database: Hosted on MongoDB Atlas M0 Free Tier.
 
+---
+
 ## 🛡️ Medical Safety Disclaimer
 
 Educational Tool Only: LabWise Urdu is an automated literacy assistant designed solely to clarify medical terminology and reference ranges. It does NOT provide medical advice, formal clinical diagnosis, or treatment plans. Always consult a licensed healthcare professional or certified physician regarding medical diagnostic results.
+
+---
 
 # 🔒 License & Intellectual Property Warning
 
