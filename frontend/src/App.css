@@ -2433,3 +2433,181 @@ body {
   }
 }
 
+/* ==========================================================================
+   Navbar Role Pills (ADMIN / USER)
+   ========================================================================== */
+.navbar-role-pill {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.navbar-role-admin {
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(124, 58, 237, 0.25);
+}
+
+.navbar-role-user {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+/* ==========================================================================
+   Admin-Side Global Reports History ("Uploaded By" column)
+   ========================================================================== */
+.history-uploader-cell {
+  font-size: 0.88rem;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.uploader-info-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.uploader-name {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.uploader-email {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.uploader-guest {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   Auth Modal "User Login" | "Admin Login" Mode Switcher
+   ========================================================================== */
+.auth-role-switcher-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.auth-role-switcher {
+  display: inline-flex;
+  background: #f1f5f9;
+  border-radius: var(--radius-md);
+  padding: 3px;
+  border: 1px solid #e2e8f0;
+}
+
+.role-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.role-switch-btn:hover {
+  color: #0f172a;
+}
+
+.role-switch-btn.role-switch-active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.role-switch-btn.role-switch-admin.role-switch-active {
+  color: #7c3aed;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(124, 58, 237, 0.15);
+}
+
+.admin-login-hint-banner {
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  color: #6b21a8;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.hint-shield-icon {
+  font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   App Toast Notification
+   ========================================================================== */
+.app-toast-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  animation: slideUpFade 0.25s ease-out;
+}
+
+.toast-content {
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.toast-icon {
+  font-size: 1.1rem;
+}
+
+.toast-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.toast-close-btn:hover {
+  color: #ffffff;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

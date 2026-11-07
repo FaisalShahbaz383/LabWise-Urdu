@@ -12,6 +12,14 @@ function AppContent() {
   const { isAdmin } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
   const [latestReport, setLatestReport] = useState(null);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage('');
+    }, 4500);
+  };
 
   // Guard admin view: if logged out or non-admin, redirect back to analyze
   useEffect(() => {
@@ -161,8 +169,25 @@ function AppContent() {
         </main>
       )}
 
+      {/* Toast Notification Alert */}
+      {toastMessage && (
+        <div className="app-toast-notification" role="status">
+          <div className="toast-content">
+            <span className="toast-icon">ℹ️</span>
+            <span>{toastMessage}</span>
+            <button
+              type="button"
+              className="toast-close-btn"
+              onClick={() => setToastMessage('')}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Authentication Modal */}
-      <AuthModal />
+      <AuthModal onNavigateTab={setActiveTab} onShowToast={showToast} />
 
       {/* App Footer */}
       <footer className="app-footer">

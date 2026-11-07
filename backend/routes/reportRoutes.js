@@ -6,6 +6,7 @@ const Report = require('../models/Report');
 const ocrService = require('../services/ocrService');
 const aiService = require('../services/aiService');
 const { protect, optionalAuth } = require('../middleware/authMiddleware');
+const adminMiddleware = require('../middleware/adminMiddleware');
 
 /**
  * @route   GET /api/reports/health
@@ -53,6 +54,33 @@ router.get('/my-history', protect, async (req, res) => {
 });
 
 /**
+ * @route   GET /api/reports/all
+ * @desc    Fetch all reports across all users with user details (Admin only)
+ * @access  Private (Admin Protected)
+ */
+router.get('/all', protect, adminMiddleware, async (req, res) => {
+  try {
+    const reports = await Report.find()
+      .populate('userId', 'name email')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      count: reports.length,
+      reports,
+    });
+  } catch (err) {
+    console.error('Error fetching all reports for admin:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve all reports.',
+      error: err.message,
+    });
+  }
+});
+
+/**
  * @route   GET /api/reports/:id
  * @desc    Fetch single report by ID
  * @access  Public / Optional Auth
@@ -83,15 +111,17 @@ router.get('/:id', optionalAuth, async (req, res) => {
 
 /**
  * @route   DELETE /api/reports/:id
- * @desc    Delete a report by ID (must belong to authenticated user)
+ * @desc    Delete a report by ID (must belong to authenticated user, or requester is Admin)
  * @access  Private (JWT Protected)
  */
 router.delete('/:id', protect, async (req, res) => {
   try {
-    const report = await Report.findOne({
-      _id: req.params.id,
-      userId: req.user._id,
-    });
+    const query =
+      req.user.role === 'admin'
+        ? { _id: req.params.id }
+        : { _id: req.params.id, userId: req.user._id };
+
+    const report = await Report.findOne(query);
 
     if (!report) {
       return res.status(404).json({

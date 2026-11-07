@@ -111,8 +111,10 @@ const Navbar = ({ activeTab, onTabChange }) => {
               </div>
               <div className="user-info-text-group">
                 <span className="user-display-name">{user?.name}</span>
-                {Boolean(isAdmin || user?.role === 'admin') && (
-                  <span className="navbar-admin-tag">Admin</span>
+                {Boolean(isAdmin || user?.role === 'admin') ? (
+                  <span className="navbar-role-pill navbar-role-admin">ADMIN</span>
+                ) : (
+                  <span className="navbar-role-pill navbar-role-user">USER</span>
                 )}
               </div>
               <button

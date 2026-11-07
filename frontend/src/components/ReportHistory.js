@@ -5,13 +5,15 @@ import ReportResult from './ReportResult';
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const ReportHistory = ({ onNavigateToUpload }) => {
-  const { token, isAuthenticated, openAuthModal } = useAuth();
+  const { user, token, isAuthenticated, isAdmin, openAuthModal } = useAuth();
 
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedReport, setSelectedReport] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+
+  const isUserAdmin = Boolean(isAdmin || user?.role === 'admin');
 
   const fetchReports = useCallback(async () => {
     if (!token) {
@@ -23,7 +25,11 @@ const ReportHistory = ({ onNavigateToUpload }) => {
     setError('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/reports/my-history`, {
+      const endpoint = isUserAdmin
+        ? `${API_BASE_URL}/api/reports/all`
+        : `${API_BASE_URL}/api/reports/my-history`;
+
+      const response = await fetch(endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,11 +44,11 @@ const ReportHistory = ({ onNavigateToUpload }) => {
       setReports(Array.isArray(data.reports) ? data.reports : []);
     } catch (err) {
       console.error('History fetch error:', err);
-      setError(err.message || 'Could not load your report history.');
+      setError(err.message || 'Could not load report history.');
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, isUserAdmin]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -159,9 +165,13 @@ const ReportHistory = ({ onNavigateToUpload }) => {
     <div className="history-card-wrapper">
       <div className="history-header-row">
         <div>
-          <h2 className="history-main-title">My Diagnostic Reports</h2>
+          <h2 className="history-main-title">
+            {isUserAdmin ? "All Users' Diagnostic History" : 'My Diagnostic Reports'}
+          </h2>
           <p className="history-subtitle">
-            Saved laboratory tests, OCR extractions, and bilingual AI summaries.
+            {isUserAdmin
+              ? 'Comprehensive administrative log of diagnostic tests, extractions, and bilingual AI summaries across all accounts.'
+              : 'Saved laboratory tests, OCR extractions, and bilingual AI summaries.'}
           </p>
         </div>
 
@@ -185,15 +195,20 @@ const ReportHistory = ({ onNavigateToUpload }) => {
       {loading ? (
         <div className="history-loading-box">
           <div className="progress-spinner"></div>
-          <p>Loading your medical report history...</p>
+          <p>
+            {isUserAdmin
+              ? 'Loading global diagnostic report records...'
+              : 'Loading your medical report history...'}
+          </p>
         </div>
       ) : reports.length === 0 ? (
         <div className="history-empty-card">
           <div className="empty-icon">📂</div>
           <h4 className="empty-title">No reports saved yet</h4>
           <p className="empty-desc">
-            When you upload blood tests, pathology labs, or radiology reports while logged in,
-            they will automatically be cataloged here for future reference.
+            {isUserAdmin
+              ? 'No medical reports have been submitted across user accounts yet.'
+              : 'When you upload blood tests, pathology labs, or radiology reports while logged in, they will automatically be cataloged here for future reference.'}
           </p>
           {onNavigateToUpload && (
             <button
@@ -211,6 +226,7 @@ const ReportHistory = ({ onNavigateToUpload }) => {
             <thead>
               <tr>
                 <th>Date &amp; Time</th>
+                {isUserAdmin && <th>Uploaded By</th>}
                 <th>Patient Name</th>
                 <th>File Document</th>
                 <th>Biomarkers Flagged</th>
@@ -227,6 +243,7 @@ const ReportHistory = ({ onNavigateToUpload }) => {
                   (t) => t.status === 'HIGH' || t.status === 'LOW'
                 ).length;
                 const patient = analysis.patientName || 'Not specified';
+                const uploader = report.userId;
 
                 return (
                   <tr
@@ -237,6 +254,18 @@ const ReportHistory = ({ onNavigateToUpload }) => {
                     <td className="history-date-cell">
                       {formatDate(report.createdAt)}
                     </td>
+                    {isUserAdmin && (
+                      <td className="history-uploader-cell">
+                        {uploader ? (
+                          <div className="uploader-info-wrap">
+                            <strong className="uploader-name">{uploader.name || 'User'}</strong>
+                            <span className="uploader-email"> ({uploader.email || 'No email'})</span>
+                          </div>
+                        ) : (
+                          <span className="uploader-guest">Guest (Anonymous)</span>
+                        )}
+                      </td>
+                    )}
                     <td className="history-patient-cell">
                       <strong>{patient}</strong>
                     </td>

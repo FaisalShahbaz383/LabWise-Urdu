@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-const AuthModal = () => {
+const AuthModal = ({ onNavigateTab, onShowToast }) => {
   const {
     authModalOpen,
     authModalTab,
@@ -11,6 +11,7 @@ const AuthModal = () => {
     register,
   } = useAuth();
 
+  const [loginMode, setLoginMode] = useState('user'); // 'user' | 'admin'
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,7 +32,20 @@ const AuthModal = () => {
         }
         await register(name, email, password);
       } else {
-        await login(email, password);
+        const result = await login(email, password);
+        const loggedInRole = result?.user?.role;
+
+        if (loginMode === 'admin') {
+          if (loggedInRole === 'admin') {
+            if (onNavigateTab) {
+              onNavigateTab('admin');
+            }
+          } else {
+            if (onShowToast) {
+              onShowToast('Logged in successfully as standard user.');
+            }
+          }
+        }
       }
       // Reset fields
       setName('');
@@ -47,6 +61,9 @@ const AuthModal = () => {
   const switchTab = (tab) => {
     setErrorMsg('');
     setAuthModalTab(tab);
+    if (tab === 'register') {
+      setLoginMode('user');
+    }
   };
 
   return (
@@ -87,18 +104,88 @@ const AuthModal = () => {
 
         {/* Modal Body */}
         <div className="modal-body">
+          {/* Subtle Role Mode Switcher (Visible in Login tab) */}
+          {authModalTab === 'login' && (
+            <div className="auth-role-switcher-container">
+              <div className="auth-role-switcher">
+                <button
+                  type="button"
+                  className={`role-switch-btn ${loginMode === 'user' ? 'role-switch-active' : ''}`}
+                  onClick={() => {
+                    setLoginMode('user');
+                    setErrorMsg('');
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ marginRight: '5px' }}
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  User Login
+                </button>
+                <button
+                  type="button"
+                  className={`role-switch-btn role-switch-admin ${
+                    loginMode === 'admin' ? 'role-switch-active' : ''
+                  }`}
+                  onClick={() => {
+                    setLoginMode('admin');
+                    setErrorMsg('');
+                  }}
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ marginRight: '5px' }}
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  Admin Login
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Intro Header */}
           <div className="modal-intro">
             <h3 className="modal-title">
               {authModalTab === 'register'
                 ? 'Join LabWise Urdu'
+                : loginMode === 'admin'
+                ? 'Admin Portal Sign In'
                 : 'Welcome Back'}
             </h3>
             <p className="modal-subtitle">
               {authModalTab === 'register'
                 ? 'Create a free account to automatically save your lab reports and track your medical history.'
+                : loginMode === 'admin'
+                ? 'Sign in to access system administration, user management, and global reports.'
                 : 'Sign in to access your past diagnostic reports and AI health insights.'}
             </p>
           </div>
+
+          {/* Admin Hint Banner */}
+          {authModalTab === 'login' && loginMode === 'admin' && (
+            <div className="admin-login-hint-banner">
+              <span className="hint-shield-icon">🛡️</span>
+              <span>Administrator access requires elevated account credentials.</span>
+            </div>
+          )}
 
           {errorMsg && (
             <div className="alert-box alert-error modal-alert">
@@ -171,6 +258,8 @@ const AuthModal = () => {
                   <span>
                     {authModalTab === 'register'
                       ? 'Creating Account...'
+                      : loginMode === 'admin'
+                      ? 'Verifying Admin Credentials...'
                       : 'Signing In...'}
                   </span>
                 </>
@@ -178,6 +267,8 @@ const AuthModal = () => {
                 <span>
                   {authModalTab === 'register'
                     ? 'Register & Save Reports'
+                    : loginMode === 'admin'
+                    ? 'Sign In as Administrator'
                     : 'Sign In to Dashboard'}
                 </span>
               )}
